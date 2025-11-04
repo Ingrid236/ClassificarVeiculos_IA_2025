@@ -1,7 +1,3 @@
-# 1. Receba os dados para serem utilizados para teste (treinamento)
-#    (Baseado no anexo "Classifica Veículos - Página1.pdf")
-#    Dados separados em entradas e saídas.
-
 # Entradas (Características: [Luxo, Capacete, Econômico])
 entradas_treinamento = [
     [0, 1, 1],  # 011 - Moto (Não luxo, Tem capacete, Econômico)
@@ -24,7 +20,7 @@ peso3 = 0
 
 # Variáveis para controlar o loop de treinamento
 epoca = 0
-taxa_aprendizagem = 1  # No Perceptron simples, somamos/subtraímos o próprio valor da entrada
+#taxa_aprendizagem = 1  # No Perceptron simples, somamos/subtraímos o próprio valor da entrada
 
 print("--- Iniciando Treinamento do Perceptron ---")
 print(f"Pesos Iniciais: p1={peso1}, p2={peso2}, p3={peso3}\n")
@@ -66,17 +62,17 @@ while True:  # Loop de épocas
             if T == 0 and esperado == 1:
                 # *se a saída estiver errada e for 0 (calculou 0, mas era 1)
                 # adicionar a cada peso os sinais de entrada relativos a elas
-                peso1 += entrada1 * taxa_aprendizagem
-                peso2 += entrada2 * taxa_aprendizagem
-                peso3 += entrada3 * taxa_aprendizagem
+                peso1 += entrada1 #* taxa_aprendizagem
+                peso2 += entrada2 #* taxa_aprendizagem
+                peso3 += entrada3 #* taxa_aprendizagem
                 print(f"    -> AJUSTE (+): Novos pesos: p1={peso1}, p2={peso2}, p3={peso3}")
 
             elif T == 1 and esperado == 0:
                 # *se a saída estiver errada e for 1 (calculou 1, mas era 0)
                 # Subtrair de cada peso os sinais de entrada relativos a elas
-                peso1 -= entrada1 * taxa_aprendizagem
-                peso2 -= entrada2 * taxa_aprendizagem
-                peso3 -= entrada3 * taxa_aprendizagem
+                peso1 -= entrada1 #* taxa_aprendizagem
+                peso2 -= entrada2 #* taxa_aprendizagem
+                peso3 -= entrada3 #* taxa_aprendizagem
                 print(f"    -> AJUSTE (-): Novos pesos: p1={peso1}, p2={peso2}, p3={peso3}")
 
     print(f"Pesos ao final da Época {epoca}: p1={peso1}, p2={peso2}, p3={peso3}")
@@ -91,6 +87,32 @@ while True:  # Loop de épocas
     if epoca > 50:
         print("Treinamento interrompido por limite de épocas.")
         break
+
+print("\n=== ANÁLISE DE RELEVÂNCIA DAS VARIÁVEIS ===")
+
+variaveis = ["É luxo?", "Tem capacete?", "É econômico?"]
+pesos_finais = [peso1, peso2, peso3]
+
+# Soma dos valores absolutos (para calcular porcentagem)
+soma_abs = sum(abs(p) for p in pesos_finais)
+
+# Gera lista com (nome, peso, relevância%)
+relevancias = []
+for i in range(3):
+    if soma_abs != 0:
+        rel = abs(pesos_finais[i]) / soma_abs * 100
+    else:
+        rel = 0
+    direcao = "puxa para CARRO (1)" if pesos_finais[i] > 0 else \
+               "puxa para MOTO (0)" if pesos_finais[i] < 0 else "neutro"
+    relevancias.append((variaveis[i], pesos_finais[i], rel, direcao))
+
+# Ordena da mais para a menos relevante
+relevancias.sort(key=lambda x: abs(x[1]), reverse=True)
+
+# Exibe tabela
+for nome, peso, rel, direcao in relevancias:
+    print(f"{nome:<20} | Peso = {peso:>5.2f} | Relevância = {rel:>6.2f}% | {direcao}")
 
 print("\n--- Fase de Teste ---")
 print("Rede treinada. Pesos finais:")

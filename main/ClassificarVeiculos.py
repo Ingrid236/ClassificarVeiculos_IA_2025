@@ -5,6 +5,7 @@ entradas_treinamento = [
     [0, 0, 1],  # 001 - Carro (Não luxo, Sem capacete, Econômico)
     [1, 0, 0]  # 100 - Carro (Luxo, Sem capacete, Não econômico)
 ]
+
 # Saídas esperadas (0 = Moto, 1 = Carro)
 saidas_treinamento = [
     0,  # Moto
@@ -20,7 +21,6 @@ peso3 = 0
 
 # Variáveis para controlar o loop de treinamento
 epoca = 0
-#taxa_aprendizagem = 1  # No Perceptron simples, somamos/subtraímos o próprio valor da entrada
 
 print("--- Iniciando Treinamento do Perceptron ---")
 print(f"Pesos Iniciais: p1={peso1}, p2={peso2}, p3={peso3}\n")
@@ -62,17 +62,17 @@ while True:  # Loop de épocas
             if T == 0 and esperado == 1:
                 # *se a saída estiver errada e for 0 (calculou 0, mas era 1)
                 # adicionar a cada peso os sinais de entrada relativos a elas
-                peso1 += entrada1 #* taxa_aprendizagem
-                peso2 += entrada2 #* taxa_aprendizagem
-                peso3 += entrada3 #* taxa_aprendizagem
+                peso1 += entrada1
+                peso2 += entrada2
+                peso3 += entrada3
                 print(f"    -> AJUSTE (+): Novos pesos: p1={peso1}, p2={peso2}, p3={peso3}")
 
             elif T == 1 and esperado == 0:
                 # *se a saída estiver errada e for 1 (calculou 1, mas era 0)
                 # Subtrair de cada peso os sinais de entrada relativos a elas
-                peso1 -= entrada1 #* taxa_aprendizagem
-                peso2 -= entrada2 #* taxa_aprendizagem
-                peso3 -= entrada3 #* taxa_aprendizagem
+                peso1 -= entrada1
+                peso2 -= entrada2
+                peso3 -= entrada3
                 print(f"    -> AJUSTE (-): Novos pesos: p1={peso1}, p2={peso2}, p3={peso3}")
 
     print(f"Pesos ao final da Época {epoca}: p1={peso1}, p2={peso2}, p3={peso3}")
